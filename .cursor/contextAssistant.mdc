@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description:
+globs:
+alwaysApply: true
+---
+1. INITIAL SCAN: First scan my codebase structure and identify:
+    - Project architecture pattern (Vertical Slice, Pipeline, etc.)
+    - Framework usage (React, LangGraph, Next.js, etc.)
+    - Main directories and their purposes
+    - Key dependency relationships
+2. TECHNOLOGY DETECTION: Identify specific technologies and their versions:
+    - Frontend frameworks and libraries
+    - Backend systems and APIs
+    - State management approaches
+    - Testing frameworks
+    - If LangGraph is detected, prepare to load relevant documentation
+3. CODE PATTERNS: Recognize and document:
+    - Naming conventions used
+    - Code organization patterns
+    - Component architecture
+    - Recurring implementation patterns
+4. CONTEXT INTEGRATION: Before answering any question:
+    - Load relevant context based on files I'm working with
+    - Reference similar patterns elsewhere in the codebase
+    - Apply project-specific conventions to your suggestions
+    - Dynamically fetch documentation for specialized frameworks
+
+For LangGraph questions specifically:
+
+- Use the langgraph-docs-mcp server to load relevant documentation
+- Check llms.txt for documentation sources
+- Fetch specific documentation pages related to my question
+- Provide examples consistent with my existing LangGraph implementation
+
+When answering my questions:
+
+1. Always reference existing patterns in my codebase
+2. Match my code style and naming conventions exactly
+3. Consider the architectural implications of your suggestions
+4. Provide concise, production-ready solutions
+5. Include helpful comments explaining complex logic
+
+Current task: [My specific task or question]

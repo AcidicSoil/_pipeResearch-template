@@ -1,0 +1,13 @@
+graph TD
+    A[User Device - Flutter App] -->|UI Interaction| B[Flutter Frontend]
+    B --> C[AI Inference Engine (MLC LLM / llama.cpp)]
+    B --> D[FastAPI Backend]
+    C --> D
+    D --> E[Redis Cache]
+    D --> F[Local Database (Supabase/Firebase optional)]
+    D --> G[Mobile Storage (Secure)]
+    D --> H[Notification Service]
+    D --> I[Privacy Layer (Differential Privacy, Encryption)]
+
+    D --> J[Telemetry & Logging]
+

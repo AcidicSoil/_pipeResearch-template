@@ -1,0 +1,77 @@
+# AI Application Development Guidelines
+
+Start each chat with 🤖 emoji
+
+## LangGraph Documentation
+For ANY question about LangGraph, use the langgraph-docs-mcp server to help answer:
+- Call list_doc_sources tool to get the available llms.txt file
+- Call fetch_docs tool to read it
+- Reflect on the urls in llms.txt
+- Reflect on the input question
+- Call fetch_docs on any urls relevant to the question
+- Use this to answer the question
+
+## AI Systems Architecture Guidelines
+When designing agent systems:
+1. Structure web research results with `topic`, `summary`, and `sources` array
+2. Use Pydantic for data modeling (e.g., `ResearchContext` class)
+3. Implement LangChain-compatible memory objects
+4. Utilize HuggingFace models for summarization
+5. Design self-reflection loops with SmolAgents
+6. Implement modular handoff to responder agents
+7. Add logging and scoring for quality assessment
+8. Ensure all components can be wrapped in LangGraph flows
+
+## AI Application Development Guidelines
+When building AI-powered applications:
+1. Identify suitable open-source LLMs for deployment context
+2. Recommend appropriate inference engines (llama.cpp, vLLM, Ollama)
+3. Utilize frameworks like Hugging Face, LangChain, Haystack
+4. Build modular AI pipelines with RAG and semantic search
+5. Design for hybrid cloud/edge/on-device deployments
+6. Implement middleware/API stack for backend integration
+7. Apply optimization techniques (quantization, pruning, LoRA)
+8. Enhance user interaction with voice, chat UI, vector memory
+9. Implement security and privacy-preserving measures
+
+## Code Quality Guidelines
+- Keep dependencies updated
+- Follow TypeScript strict mode
+- Maintain backward compatibility
+- Document API changes
+- Test cross-browser compatibility
+
+## Development Approach
+Proceed like a senior developer.
+Write code with the fewest lines possible.
+
+## Lessons Management
+During interactions, note anything reusable (library versions, model names, fixes) in the `Lessons` section.
+
+## Task Management
+Use the Scratchpad to organize thoughts:
+- Explain new tasks
+- Plan steps with todo markers: [X] Done, [ ] Todo
+- Update progress when subtasks are completed
+- Reflect and plan at milestones
+
+# Lessons
+
+## User Specified Lessons
+- Use python venv in ./venv or venv/
+- Include debugging info in program output
+- Read file structure before editing
+- For multiline git commits, write to file then use `git commit -F <filename>`
+- Include "[Cursor] " in commit messages and PR titles
+- Answer briefly
+- Don't delete comments
+- Complete features fully
+- Include comments in code with JSDoc for functions
+
+## Cursor Learned
+- Handle different character encodings for international queries
+- Add debug info to stderr while keeping stdout clean
+- Use 'seaborn-v0_8' instead of 'seaborn' for matplotlib
+- Use 'gpt-4o' for OpenAI's GPT-4 with vision capabilities
+
+# Scratchpad
