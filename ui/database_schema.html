@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Database Schema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+        .table-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .field-row:hover {
+            background-color: rgba(249, 250, 251, 0.8);
+        }
+        .tab-active {
+            border-bottom: 3px solid #7c3aed;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+        .copy-btn:hover {
+            background-color: rgba(124, 58, 237, 0.1);
+        }
+        .diagram-node {
+            transition: all 0.3s ease;
+        }
+        .diagram-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .relation-line {
+            stroke-dasharray: 5;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 1000;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <div class="gradient-bg text-white">
+            <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-database text-3xl mr-3"></i>
+                        <h1 class="text-2xl font-bold">AI Assistant Database Schema</h1>
+                    </div>
+                    <div class="hidden md:block">
+                        <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm">Version 2.1.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+            <!-- Tech Stack Section -->
+            <section class="mb-12 bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-layer-group text-purple-600 mr-2"></i> Technology Stack
+                    </h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i class="fas fa-cloud text-purple-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Cloud Database</h3>
+                            <p class="text-gray-600">Supabase (PostgreSQL)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-mobile-alt text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">On-device Database</h3>
+                            <p class="text-gray-600">Drift (Flutter ORM for SQLite)</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <i class="fas fa-sync-alt text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Sync Strategy</h3>
+                            <p class="text-gray-600">Background sync with timestamp conflict resolution</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabs Navigation -->
+            <div class="flex border-b border-gray-200 mb-6">
+                <button id="tables-tab" class="tab-active mr-8 py-4 px-1 text-sm font-medium">
+                    <i class="fas fa-table mr-2"></i>Database Tables
+                </button>
+                <button id="diagram-tab" class="mr-8 py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-project-diagram mr-2"></i>ER Diagram
+                </button>
+                <button id="performance-tab" class="mr-8 py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Performance
+                </button>
+                <button id="offline-tab" class="py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-wifi-slash mr-2"></i>Offline Support
+                </button>
+            </div>
+
+            <!-- Tables Content -->
+            <div id="tables-content" class="content-section">
+                <div class="grid grid-cols-1 gap-6">
+                    <!-- Users Table -->
+                    <div class="table-card bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-users text-purple-600 mr-2"></i> users
+                            </h3>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span class="mr-3">Primary Key: id</span>
+                                <button class="copy-btn p-1 rounded-md" title="Copy table schema">
+                                    <i class="fas fa-copy text-gray-400 hover:text-purple-600"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="col-span-4">Field</div>
+                                <div class="col-span-3">Type</div>
+                                <div class="col-span-5">Notes</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">id</div>
+                                <div class="col-span-3">UUID</div>
+                                <div class="col-span-5 text-gray-600">Primary Key, Unique user ID</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">email</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">Required, unique</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">password_hash</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">Stored securely</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">created_at</div>
+                                <div class="col-span-3">Timestamp</div>
+                                <div class="col-span-5 text-gray-600">Account creation time</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">preferences</div>
+                                <div class="col-span-3">JSONB</div>
+                                <div class="col-span-5 text-gray-600">Theme, assistant type, language</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tasks Table -->
+                    <div class="table-card bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-tasks text-blue-600 mr-2"></i> tasks
+                            </h3>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span class="mr-3">Foreign Key: user_id → users.id</span>
+                                <button class="copy-btn p-1 rounded-md" title="Copy table schema">
+                                    <i class="fas fa-copy text-gray-400 hover:text-blue-600"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="col-span-4">Field</div>
+                                <div class="col-span-3">Type</div>
+                                <div class="col-span-5">Notes</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">id</div>
+                                <div class="col-span-3">UUID</div>
+                                <div class="col-span-5 text-gray-600">Primary Key, Unique task ID</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">user_id</div>
+                                <div class="col-span-3">UUID</div>
+                                <div class="col-span-5 text-gray-600">References users.id</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">title</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">Required</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">status</div>
+                                <div class="col-span-3">Enum</div>
+                                <div class="col-span-5 text-gray-600">todo, in_progress, done</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">priority</div>
+                                <div class="col-span-3">Enum</div>
+                                <div class="col-span-5 text-gray-600">low, medium, high</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">source_type</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">manual, email, calendar, llm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Events Table -->
+                    <div class="table-card bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-calendar-alt text-green-600 mr-2"></i> calendar_events
+                            </h3>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span class="mr-3">Foreign Key: user_id → users.id</span>
+                                <button class="copy-btn p-1 rounded-md" title="Copy table schema">
+                                    <i class="fas fa-copy text-gray-400 hover:text-green-600"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="col-span-4">Field</div>
+                                <div class="col-span-3">Type</div>
+                                <div class="col-span-5">Notes</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">id</div>
+                                <div class="col-span-3">UUID</div>
+                                <div class="col-span-5 text-gray-600">Primary Key, Unique event ID</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">user_id</div>
+                                <div class="col-span-3">UUID</div>
+                                <div class="col-span-5 text-gray-600">References users.id</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">start_time</div>
+                                <div class="col-span-3">Timestamp</div>
+                                <div class="col-span-5 text-gray-600">Required</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">end_time</div>
+                                <div class="col-span-3">Timestamp</div>
+                                <div class="col-span-5 text-gray-600">Required</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">source</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">user, gmail, llm</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Tables (Collapsible) -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center cursor-pointer" id="chat-tables-toggle">
+                            <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-comments text-indigo-600 mr-2"></i> Chat Tables
+                            </h3>
+                            <i class="fas fa-chevron-down text-gray-400 transition-transform duration-200"></i>
+                        </div>
+                        <div class="divide-y divide-gray-200 hidden" id="chat-tables-content">
+                            <!-- Chat Sessions -->
+                            <div class="p-6 border-b border-gray-200">
+                                <h4 class="text-md font-medium text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-comment-dots text-indigo-500 mr-2"></i> chat_sessions
+                                </h4>
+                                <div class="grid grid-cols-12 gap-4 text-sm mb-2 font-medium text-gray-500">
+                                    <div class="col-span-4">Field</div>
+                                    <div class="col-span-3">Type</div>
+                                    <div class="col-span-5">Notes</div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4 text-sm py-2 text-gray-800">
+                                    <div class="col-span-4 font-medium">id</div>
+                                    <div class="col-span-3">UUID</div>
+                                    <div class="col-span-5 text-gray-600">Primary Key</div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4 text-sm py-2 text-gray-800">
+                                    <div class="col-span-4 font-medium">assistant_mode</div>
+                                    <div class="col-span-3">Text</div>
+                                    <div class="col-span-5 text-gray-600">productivity, calendar, etc.</div>
+                                </div>
+                            </div>
+
+                            <!-- Chat Messages -->
+                            <div class="p-6">
+                                <h4 class="text-md font-medium text-gray-800 mb-4 flex items-center">
+                                    <i class="fas fa-comment-alt text-indigo-500 mr-2"></i> chat_messages
+                                </h4>
+                                <div class="grid grid-cols-12 gap-4 text-sm mb-2 font-medium text-gray-500">
+                                    <div class="col-span-4">Field</div>
+                                    <div class="col-span-3">Type</div>
+                                    <div class="col-span-5">Notes</div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4 text-sm py-2 text-gray-800">
+                                    <div class="col-span-4 font-medium">session_id</div>
+                                    <div class="col-span-3">UUID</div>
+                                    <div class="col-span-5 text-gray-600">References chat_sessions.id</div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4 text-sm py-2 text-gray-800">
+                                    <div class="col-span-4 font-medium">sender</div>
+                                    <div class="col-span-3">Text</div>
+                                    <div class="col-span-5 text-gray-600">user or assistant</div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-4 text-sm py-2 text-gray-800">
+                                    <div class="col-span-4 font-medium">source_model</div>
+                                    <div class="col-span-3">Text</div>
+                                    <div class="col-span-5 text-gray-600">phi-3, llama3, etc.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assistant Settings Table -->
+                    <div class="table-card bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-200 overflow-hidden">
+                        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-cog text-yellow-600 mr-2"></i> assistant_settings
+                            </h3>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span class="mr-3">Primary Key: user_id</span>
+                                <button class="copy-btn p-1 rounded-md" title="Copy table schema">
+                                    <i class="fas fa-copy text-gray-400 hover:text-yellow-600"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <div class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="col-span-4">Field</div>
+                                <div class="col-span-3">Type</div>
+                                <div class="col-span-5">Notes</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">preferred_model</div>
+                                <div class="col-span-3">Text</div>
+                                <div class="col-span-5 text-gray-600">phi3, gemma, etc.</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">response_style</div>
+                                <div class="col-span-3">Enum</div>
+                                <div class="col-span-5 text-gray-600">short, detailed, humorous</div>
+                            </div>
+                            <div class="field-row grid grid-cols-12 px-6 py-4 text-sm text-gray-800">
+                                <div class="col-span-4 font-medium">offline_fallback</div>
+                                <div class="col-span-3">Boolean</div>
+                                <div class="col-span-5 text-gray-600">Use local model if offline</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ER Diagram Content (Hidden by default) -->
+            <div id="diagram-content" class="content-section hidden">
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Entity Relationship Diagram</h3>
+                    <div class="relative h-96 border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- This would be replaced with an actual diagram in a real implementation -->
+                        <div class="absolute top-1/4 left-1/4 diagram-node bg-purple-50 border border-purple-200 p-4 rounded-lg w-48">
+                            <div class="font-bold text-purple-800 text-center mb-2">users</div>
+                            <div class="text-xs text-purple-600 text-center">(PK) id</div>
+                        </div>
+                        <div class="absolute top-1/4 left-3/4 diagram-node bg-blue-50 border border-blue-200 p-4 rounded-lg w-48">
+                            <div class="font-bold text-blue-800 text-center mb-2">tasks</div>
+                            <div class="text-xs text-blue-600 text-center">(FK) user_id → users.id</div>
+                        </div>
+                        <div class="absolute top-2/3 left-1/4 diagram-node bg-green-50 border border-green-200 p-4 rounded-lg w-48">
+                            <div class="font-bold text-green-800 text-center mb-2">calendar_events</div>
+                            <div class="text-xs text-green-600 text-center">(FK) user_id → users.id</div>
+                        </div>
+                        <div class="absolute top-2/3 left-3/4 diagram-node bg-indigo-50 border border-indigo-200 p-4 rounded-lg w-48">
+                            <div class="font-bold text-indigo-800 text-center mb-2">chat_sessions</div>
+                            <div class="text-xs text-indigo-600 text-center">(FK) user_id → users.id</div>
+                        </div>
+                        <div class="absolute top-1/2 left-1/2 diagram-node bg-yellow-50 border border-yellow-200 p-4 rounded-lg w-48">
+                            <div class="font-bold text-yellow-800 text-center mb-2">assistant_settings</div>
+                            <div class="text-xs text-yellow-600 text-center">(PK) user_id → users.id</div>
+                        </div>
+                        <!-- Lines representing relationships -->
+                        <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="25%" y1="35%" x2="45%" y2="35%" stroke="#7c3aed" stroke-width="2" class="relation-line" />
+                            <line x1="55%" y1="35%" x2="75%" y2="35%" stroke="#3b82f6" stroke-width="2" class="relation-line" />
+                            <line x1="25%" y1="65%" x2="45%" y2="65%" stroke="#10b981" stroke-width="2" class="relation-line" />
+                            <line x1="55%" y1="65%" x2="75%" y2="65%" stroke="#6366f1" stroke-width="2" class="relation-line" />
+                            <line x1="35%" y1="50%" x2="65%" y2="50%" stroke="#eab308" stroke-width="2" class="relation-line" />
+                        </svg>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <p>The diagram shows the central <span class="font-medium">users</span> table with relationships to all other tables in the schema.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Content (Hidden by default) -->
+            <div id="performance-content" class="content-section hidden">
+                <div class="bg-white rounded-xl shadow-md p-6 mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Indexing & Performance</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">Key Indexes</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Index on <span class="font-mono font-medium">user_id</span> for all foreign key relationships</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Composite index on <span class="font-mono font-medium">(user_id, due_date)</span> for agenda views</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                    <span>Full-text search on <span class="font-mono font-medium">chat_messages.content</span> and <span class="font-mono font-medium">tasks.title</span></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">Optimization Strategies</h4>
+                            <ul class="space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <i class="fas fa-bolt text-yellow-500 mt-1 mr-2"></i>
+                                    <span>Materialized views for common dashboard queries</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-bolt text-yellow-500 mt-1 mr-2"></i>
+                                    <span>Query batching for mobile clients</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-bolt text-yellow-500 mt-1 mr-2"></i>
+                                    <span>Cursor-based pagination for large datasets</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offline Support Content (Hidden by default) -->
+            <div id="offline-content" class="content-section hidden">
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Offline Support</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">On-device Tables</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <ul class="space-y-2 text-sm text-gray-700">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-table text-purple-500 mr-2"></i>
+                                        <span>tasks (full sync)</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-calendar text-green-500 mr-2"></i>
+                                        <span>calendar_events (full sync)</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-cog text-yellow-500 mr-2"></i>
+                                        <span>assistant_settings (full sync)</span>
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-comments text-indigo-500 mr-2"></i>
+                                        <span>chat_sessions + chat_messages (recent only)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-2">Conflict Resolution</h4>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <div class="mb-3">
+                                    <h5 class="text-sm font-medium text-gray-700 mb-1">Strategy</h5>
+                                    <p class="text-xs text-gray-600">Use <span class="font-mono">updated_at</span> timestamps</p>
+                                </div>
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-700 mb-1">Priority Rules</h5>
+                                    <ul class="text-xs text-gray-600 space-y-1">
+                                        <li>1. Last edit timestamp wins</li>
+                                        <li>2. If timestamps equal, cloud version wins</li>
+                                        <li>3. For critical conflicts, prompt user</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 class="font-medium text-blue-800 mb-2">Backup Strategy</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <i class="fas fa-cloud text-blue-500 mr-2"></i>
+                                    <span class="text-sm font-medium">Cloud Backups</span>
+                                </div>
+                                <p class="text-xs text-blue-700">Supabase daily backups with 7-day retention</p>
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-1">
+                                    <i class="fas fa-mobile-alt text-blue-500 mr-2"></i>
+                                    <span class="text-sm font-medium">Local Backups</span>
+                                </div>
+                                <p class="text-xs text-blue-700">SQLite autosaves every minute when app is active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = ['tables', 'diagram', 'performance', 'offline'];
+
+        tabs.forEach(tab => {
+            document.getElementById(`${tab}-tab`).addEventListener('click', function() {
+                // Update tab styling
+                tabs.forEach(t => {
+                    const tabEl = document.getElementById(`${t}-tab`);
+                    const contentEl = document.getElementById(`${t}-content`);
+
+                    if (t === tab) {
+                        tabEl.classList.remove('text-gray-500');
+                        tabEl.classList.add('tab-active');
+                        contentEl.classList.remove('hidden');
+                    } else {
+                        tabEl.classList.add('text-gray-500');
+                        tabEl.classList.remove('tab-active');
+                        contentEl.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Chat tables collapsible
+        document.getElementById('chat-tables-toggle').addEventListener('click', function() {
+            const content = document.getElementById('chat-tables-content');
+            const icon = this.querySelector('i');
+
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        });
+
+        // Copy table schema buttons
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tableCard = this.closest('.table-card');
+                const tableName = tableCard.querySelector('h3').textContent.trim();
+                const fields = Array.from(tableCard.querySelectorAll('.field-row')).map(row => {
+                    const cols = row.querySelectorAll('div');
+                    return `${cols[0].textContent.trim()} | ${cols[1].textContent.trim()} | ${cols[2].textContent.trim()}`;
+                }).join('\n');
+
+                const schema = `${tableName}\n${'='.repeat(tableName.length)}\n${fields}`;
+                navigator.clipboard.writeText(schema).then(() => {
+                    // Show feedback
+                    const originalIcon = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i>';
+                    setTimeout(() => {
+                        this.innerHTML = originalIcon;
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

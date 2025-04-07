@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Architecture Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .architecture-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .architecture-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .hosting-card { border-left-color: #3b82f6; }
+        .ci-card { border-left-color: #10b981; }
+        .monitoring-card { border-left-color: #f59e0b; }
+        .backup-card { border-left-color: #8b5cf6; }
+        .scaling-card { border-left-color: #ec4899; }
+
+        .tech-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        .vercel-badge { background-color: #000; color: white; }
+        .supabase-badge { background-color: #3ecf8e; color: white; }
+        .github-badge { background-color: #181717; color: white; }
+        .sentry-badge { background-color: #fb4226; color: white; }
+        .postgres-badge { background-color: #336791; color: white; }
+
+        .pipeline-step {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .pipeline-step:before {
+            content: "";
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e5e7eb;
+        }
+        .pipeline-step:first-child:before {
+            top: 1.5rem;
+        }
+        .pipeline-step:last-child:before {
+            bottom: calc(100% - 1.5rem);
+        }
+        .pipeline-step-dot {
+            position: absolute;
+            left: 0.5rem;
+            top: 0.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+            background: white;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 flex items-center">
+                    <i class="fas fa-server text-blue-500 mr-3"></i>
+                    DevOps Architecture
+                </h1>
+                <p class="text-gray-600 mt-2">Complete infrastructure and deployment setup</p>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center space-x-2">
+                <span class="text-sm text-gray-500">Status:</span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span class="w-2 h-2 mr-1 rounded-full bg-green-500"></span>
+                    Operational
+                </span>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Hosting -->
+            <div class="architecture-card hosting-card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-cloud text-blue-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Hosting</h2>
+                        <p class="text-gray-600">Application deployment infrastructure</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge vercel-badge">
+                                <i class="fab fa-react mr-1"></i> Vercel
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">Frontend (Flutter Web)</h3>
+                            <p class="text-sm text-gray-600">Static SPA builds with edge CDN caching</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-globe-americas mr-1"></i>
+                                Global edge network with automatic cache invalidation
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge supabase-badge">
+                                <i class="fas fa-bolt mr-1"></i> Supabase
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">Backend Services</h3>
+                            <p class="text-sm text-gray-600">Edge Functions + Postgres Database</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-shield-alt mr-1"></i>
+                                Automatic scaling with usage-based pricing
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge postgres-badge">
+                                <i class="fas fa-database mr-1"></i> Postgres
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">Database</h3>
+                            <p class="text-sm text-gray-600">Supabase managed PostgreSQL</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-history mr-1"></i>
+                                Daily snapshots with 7-day retention (30-day on Pro)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CI/CD -->
+            <div class="architecture-card ci-card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-green-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-sync-alt text-green-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">CI/CD Pipeline</h2>
+                        <p class="text-gray-600">Automated testing and deployment</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge github-badge">
+                                <i class="fab fa-github mr-1"></i> GitHub
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">GitHub Actions</h3>
+                            <p class="text-sm text-gray-600">Automated workflows on every push</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h4 class="font-medium text-gray-700 mb-3">Pipeline Steps</h4>
+                        <div class="space-y-4">
+                            <div class="pipeline-step">
+                                <div class="pipeline-step-dot"></div>
+                                <div class="bg-gray-50 p-3 rounded-md">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-code text-blue-500 mr-2"></i>
+                                        <span class="font-mono text-sm">flutter pub get</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Install all dependencies</p>
+                                </div>
+                            </div>
+
+                            <div class="pipeline-step">
+                                <div class="pipeline-step-dot"></div>
+                                <div class="bg-gray-50 p-3 rounded-md">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-search text-blue-500 mr-2"></i>
+                                        <span class="font-mono text-sm">flutter analyze</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Static code analysis</p>
+                                </div>
+                            </div>
+
+                            <div class="pipeline-step">
+                                <div class="pipeline-step-dot"></div>
+                                <div class="bg-gray-50 p-3 rounded-md">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-vial text-blue-500 mr-2"></i>
+                                        <span class="font-mono text-sm">flutter test</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Run unit & integration tests</p>
+                                </div>
+                            </div>
+
+                            <div class="pipeline-step">
+                                <div class="pipeline-step-dot"></div>
+                                <div class="bg-gray-50 p-3 rounded-md">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-rocket text-blue-500 mr-2"></i>
+                                        <span class="font-mono text-sm">deploy-to-vercel</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">Deploy web build to Vercel</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring -->
+            <div class="architecture-card monitoring-card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-chart-line text-yellow-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Monitoring</h2>
+                        <p class="text-gray-600">Performance tracking and error reporting</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge sentry-badge mr-2">
+                                <i class="fas fa-bug mr-1"></i> Sentry
+                            </span>
+                            <span class="text-xs text-gray-500">Frontend & Mobile</span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Error Tracking</h3>
+                        <p class="text-sm text-gray-600">Real-time Dart/Flutter error reporting</p>
+                        <div class="mt-3 flex justify-between text-xs text-gray-500">
+                            <span><i class="fas fa-exclamation-circle mr-1"></i> 12 errors (24h)</span>
+                            <span><i class="fas fa-users mr-1"></i> 98% resolved</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge supabase-badge mr-2">
+                                <i class="fas fa-bolt mr-1"></i> Supabase
+                            </span>
+                            <span class="text-xs text-gray-500">Backend</span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Function Logs</h3>
+                        <p class="text-sm text-gray-600">Edge Function execution metrics</p>
+                        <div class="mt-3 flex justify-between text-xs text-gray-500">
+                            <span><i class="fas fa-play mr-1"></i> 1.2k invocations</span>
+                            <span><i class="fas fa-clock mr-1"></i> 98ms avg</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge vercel-badge mr-2">
+                                <i class="fab fa-react mr-1"></i> Vercel
+                            </span>
+                            <span class="text-xs text-gray-500">Frontend</span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Web Analytics</h3>
+                        <p class="text-sm text-gray-600">Performance and usage metrics</p>
+                        <div class="mt-3 flex justify-between text-xs text-gray-500">
+                            <span><i class="fas fa-users mr-1"></i> 4.5k visitors</span>
+                            <span><i class="fas fa-tachometer-alt mr-1"></i> 1.2s LCP</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge postgres-badge mr-2">
+                                <i class="fas fa-database mr-1"></i> Postgres
+                            </span>
+                            <span class="text-xs text-gray-500">Database</span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Query Performance</h3>
+                        <p class="text-sm text-gray-600">Slow query monitoring</p>
+                        <div class="mt-3 flex justify-between text-xs text-gray-500">
+                            <span><i class="fas fa-search mr-1"></i> 12 slow queries</span>
+                            <span><i class="fas fa-magic mr-1"></i> 8 optimized</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backups -->
+            <div class="architecture-card backup-card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-purple-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-database text-purple-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Backups</h2>
+                        <p class="text-gray-600">Data protection and recovery</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge supabase-badge">
+                                <i class="fas fa-history mr-1"></i> Auto
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">Daily Snapshots</h3>
+                            <p class="text-sm text-gray-600">Automated database backups</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-calendar mr-1"></i>
+                                Retention: 7 days (Free), 30 days (Pro)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge bg-gray-200 text-gray-800">
+                                <i class="fas fa-user-cog mr-1"></i> Manual
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">On-Demand Backups</h3>
+                            <p class="text-sm text-gray-600">Trigger via Supabase dashboard</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-cloud-download-alt mr-1"></i>
+                                Download SQL dump for local storage
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="mr-3 mt-1">
+                            <span class="tech-badge bg-blue-100 text-blue-800">
+                                <i class="fas fa-shield-alt mr-1"></i> Point-in-Time
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800">PITR Recovery</h3>
+                            <p class="text-sm text-gray-600">Available on Pro tier</p>
+                            <div class="mt-2 text-xs text-gray-500 flex items-center">
+                                <i class="fas fa-clock mr-1"></i>
+                                Restore to any second in the past 7 days
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scaling -->
+            <div class="architecture-card scaling-card bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-pink-100 p-3 rounded-full mr-4">
+                        <i class="fas fa-expand text-pink-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800">Scaling</h2>
+                        <p class="text-gray-600">Handling increased load</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge vercel-badge mr-2">
+                                <i class="fab fa-react mr-1"></i> Vercel
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Frontend</h3>
+                        <p class="text-sm text-gray-600">Global edge CDN with static caching</p>
+                        <div class="mt-3 text-xs text-gray-500 flex items-center">
+                            <i class="fas fa-network-wired mr-1"></i>
+                            30+ edge locations worldwide
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge supabase-badge mr-2">
+                                <i class="fas fa-bolt mr-1"></i> Supabase
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Backend</h3>
+                        <p class="text-sm text-gray-600">Edge Functions auto-scale</p>
+                        <div class="mt-3 text-xs text-gray-500 flex items-center">
+                            <i class="fas fa-chart-line mr-1"></i>
+                            Usage-based concurrency scaling
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge postgres-badge mr-2">
+                                <i class="fas fa-database mr-1"></i> Postgres
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Database</h3>
+                        <p class="text-sm text-gray-600">Vertical scaling + read replicas</p>
+                        <div class="mt-3 text-xs text-gray-500 flex items-center">
+                            <i class="fas fa-server mr-1"></i>
+                            Auto-scaling compute resources (Pro tier)
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="tech-badge bg-green-100 text-green-800 mr-2">
+                                <i class="fas fa-mobile-alt mr-1"></i> Mobile
+                            </span>
+                        </div>
+                        <h3 class="font-medium text-gray-800">Client Apps</h3>
+                        <p class="text-sm text-gray-600">Native runtime scaling</p>
+                        <div class="mt-3 text-xs text-gray-500 flex items-center">
+                            <i class="fas fa-user mr-1"></i>
+                            No server-side scaling needed
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CI/CD YAML Example -->
+        <div class="panel mt-6 bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-start mb-4">
+                <div class="bg-green-100 p-3 rounded-full mr-4">
+                    <i class="fab fa-yaml text-green-500 text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">CI/CD Pipeline Configuration</h2>
+                    <p class="text-gray-600">GitHub Actions workflow definition</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg overflow-hidden">
+                <div class="flex items-center bg-gray-700 px-4 py-2">
+                    <div class="flex space-x-2 mr-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="text-sm text-gray-300">.github/workflows/ci.yml</div>
+                </div>
+                <pre class="text-gray-100 p-4 overflow-x-auto text-sm font-mono">
+<code><span class="text-blue-300">name</span>: <span class="text-green-300">CI Pipeline</span>
+
+<span class="text-blue-300">on</span>: [<span class="text-green-300">push</span>]
+
+<span class="text-blue-300">jobs</span>:
+  <span class="text-green-300">build</span>:
+    <span class="text-blue-300">runs-on</span>: <span class="text-green-300">ubuntu-latest</span>
+    <span class="text-blue-300">steps</span>:
+      - <span class="text-blue-300">uses</span>: <span class="text-green-300">actions/checkout@v3</span>
+      - <span class="text-blue-300">uses</span>: <span class="text-green-300">subosito/flutter-action@v2</span>
+        <span class="text-blue-300">with</span>:
+          <span class="text-blue-300">flutter-version</span>: <span class="text-green-300">'3.19.0'</span>
+      - <span class="text-blue-300">run</span>: <span class="text-green-300">flutter pub get</span>
+      - <span class="text-blue-300">run</span>: <span class="text-green-300">flutter analyze</span>
+      - <span class="text-blue-300">run</span>: <span class="text-green-300">flutter test</span>
+      - <span class="text-blue-300">run</span>: <span class="text-green-300">flutter build web --release</span>
+      - <span class="text-blue-300">uses</span>: <span class="text-green-300">amondnet/vercel-action@v20</span>
+        <span class="text-blue-300">with</span>:
+          <span class="text-blue-300">vercel-token</span>: <span class="text-green-300">${{ secrets.VERCEL_TOKEN }}</span>
+          <span class="text-blue-300">vercel-org-id</span>: <span class="text-green-300">${{ secrets.VERCEL_ORG_ID }}</span>
+          <span class="text-blue-300">vercel-project-id</span>: <span class="text-green-300">${{ secrets.VERCEL_PROJECT_ID }}</span>
+          <span class="text-blue-300">working-directory</span>: <span class="text-green-300">build/web</span></code>
+                </pre>
+            </div>
+
+            <div class="mt-4 flex items-center text-sm text-gray-500">
+                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                This workflow runs on every git push, testing and deploying the Flutter web build
+            </div>
+        </div>
+
+        <!-- Architecture Diagram -->
+        <div class="panel mt-6 bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-start mb-4">
+                <div class="bg-blue-100 p-3 rounded-full mr-4">
+                    <i class="fas fa-project-diagram text-blue-500 text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">System Architecture</h2>
+                    <p class="text-gray-600">Visual overview of the infrastructure</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+                <div class="flex justify-center">
+                    <div class="relative max-w-4xl">
+                        <!-- Mobile Clients -->
+                        <div class="absolute left-0 top-1/4 w-24 text-center">
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fas fa-mobile-alt text-3xl text-blue-500"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Mobile Apps</p>
+                            <p class="text-xs text-gray-500">iOS & Android</p>
+                        </div>
+
+                        <!-- Web Client -->
+                        <div class="absolute left-0 top-3/4 w-24 text-center">
+                            <div class="bg-white p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fas fa-globe text-3xl text-green-500"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Web App</p>
+                            <p class="text-xs text-gray-500">Flutter Web</p>
+                        </div>
+
+                        <!-- Vercel -->
+                        <div class="absolute left-1/4 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 text-center">
+                            <div class="bg-black p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fab fa-react text-3xl text-white"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Vercel</p>
+                            <p class="text-xs text-gray-500">Edge CDN</p>
+                            <div class="absolute -right-10 top-1/2 w-10 h-1 bg-gray-300"></div>
+                        </div>
+
+                        <!-- Supabase -->
+                        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 text-center">
+                            <div class="bg-green-500 p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fas fa-bolt text-3xl text-white"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Supabase</p>
+                            <p class="text-xs text-gray-500">Backend</p>
+                            <div class="absolute -left-10 top-1/2 w-10 h-1 bg-gray-300"></div>
+                            <div class="absolute -right-10 top-1/2 w-10 h-1 bg-gray-300"></div>
+                        </div>
+
+                        <!-- Postgres -->
+                        <div class="absolute left-3/4 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 text-center">
+                            <div class="bg-blue-800 p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fas fa-database text-3xl text-white"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Postgres</p>
+                            <p class="text-xs text-gray-500">Database</p>
+                            <div class="absolute -left-10 top-1/2 w-10 h-1 bg-gray-300"></div>
+                        </div>
+
+                        <!-- Sentry -->
+                        <div class="absolute right-0 top-1/4 w-24 text-center">
+                            <div class="bg-red-500 p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fas fa-bug text-3xl text-white"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">Sentry</p>
+                            <p class="text-xs text-gray-500">Monitoring</p>
+                        </div>
+
+                        <!-- GitHub -->
+                        <div class="absolute right-0 top-3/4 w-24 text-center">
+                            <div class="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-200 mx-auto w-20">
+                                <i class="fab fa-github text-3xl text-white"></i>
+                            </div>
+                            <p class="text-xs mt-2 font-medium">GitHub</p>
+                            <p class="text-xs text-gray-500">CI/CD</p>
+                        </div>
+
+                        <!-- Connection arrows -->
+                        <div class="absolute left-24 top-1/4 w-1/4 h-1 bg-gray-300"></div>
+                        <div class="absolute left-24 top-3/4 w-1/4 h-1 bg-gray-300"></div>
+                        <div class="absolute left-1/2 top-1/2 w-1/4 h-1 bg-gray-300"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                    <span class="text-xs">Client Applications</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                    <span class="text-xs">Backend Services</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                    <span class="text-xs">Data Storage</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                    <span class="text-xs">Monitoring</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add pulse animation to status elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation to important elements
+            const importantCards = document.querySelectorAll('.architecture-card');
+            importantCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.classList.add('pulse-animation');
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.classList.remove('pulse-animation');
+                });
+            });
+
+            // Simulate live status updates
+            setInterval(() => {
+                const status = document.querySelector('.bg-green-100');
+                if (status) {
+                    status.classList.toggle('bg-green-100');
+                    status.classList.toggle('bg-green-200');
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

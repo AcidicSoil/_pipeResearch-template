@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Secretary - Flutter UI Concept</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        .material-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .material-ripple:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #000 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10,10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+        .material-ripple:active:after {
+            transform: scale(0,0);
+            opacity: .3;
+            transition: 0s;
+        }
+        .chat-bubble {
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        .user-bubble {
+            border-bottom-right-radius: 4px;
+            background-color: #3b82f6;
+            color: white;
+        }
+        .ai-bubble {
+            border-bottom-left-radius: 4px;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .offline-banner {
+            background: repeating-linear-gradient(
+                45deg,
+                #f59e0b,
+                #f59e0b 10px,
+                #fbbf24 10px,
+                #fbbf24 20px
+            );
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- App Container -->
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg overflow-hidden flex flex-col">
+        <!-- Offline Banner -->
+        <div class="offline-banner text-white text-center py-1 text-sm hidden" id="offlineBanner">
+            <i class="fas fa-wifi-slash mr-1"></i> Working offline - some features limited
+        </div>
+
+        <!-- App Bar -->
+        <header class="bg-blue-600 text-white p-4 shadow-md">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h1 class="text-xl font-bold">AI Secretary</h1>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="material-ripple p-2 rounded-full hover:bg-blue-500 transition">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="material-ripple p-2 rounded-full hover:bg-blue-500 transition">
+                        <i class="fas fa-ellipsis-vertical"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4" id="mainContent">
+            <!-- Dashboard View (Default) -->
+            <div id="dashboardView">
+                <!-- Welcome Header -->
+                <div class="mb-6 animate-fade-in">
+                    <h2 class="text-2xl font-bold mb-1">Good morning, Michael</h2>
+                    <p class="text-gray-600">Here's your daily briefing</p>
+                </div>
+
+                <!-- Priority Tasks -->
+                <div class="mb-6 animate-fade-in" style="animation-delay: 0.1s;">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-lg flex items-center">
+                            <i class="fas fa-star text-yellow-500 mr-2"></i>
+                            Priority Tasks
+                        </h3>
+                        <button class="text-blue-500 text-sm material-ripple">View all</button>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-start">
+                                <div class="mr-3 mt-1">
+                                    <div class="w-5 h-5 rounded-full border-2 border-red-500 flex items-center justify-center">
+                                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Finalize Q2 financial report</p>
+                                    <p class="text-sm text-gray-500 mt-1">Due today at 3:00 PM</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-blue-500 material-ripple">
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+                            <div class="flex items-start">
+                                <div class="mr-3 mt-1">
+                                    <div class="w-5 h-5 rounded-full border-2 border-yellow-500 flex items-center justify-center">
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-medium">Prepare client presentation</p>
+                                    <p class="text-sm text-gray-500 mt-1">Meeting tomorrow at 10:00 AM</p>
+                                </div>
+                                <button class="text-gray-400 hover:text-blue-500 material-ripple">
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Agenda -->
+                <div class="mb-6 animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-lg flex items-center">
+                            <i class="fas fa-calendar-day text-blue-500 mr-2"></i>
+                            Today's Agenda
+                        </h3>
+                        <button class="text-blue-500 text-sm material-ripple">Add event</button>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-gray-100 flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-users text-blue-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Team Standup</p>
+                                <p class="text-sm text-gray-500">9:30 AM - 10:00 AM • Zoom</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 border-b border-gray-100 flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-phone text-green-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Client Call</p>
+                                <p class="text-sm text-gray-500">11:00 AM - 11:30 AM • Acme Corp</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                <i class="fas fa-chart-line text-purple-500"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium">Project Review</p>
+                                <p class="text-sm text-gray-500">2:00 PM - 3:00 PM • Conference Room B</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="animate-fade-in" style="animation-delay: 0.3s;">
+                    <h3 class="font-bold text-lg mb-3">Quick Actions</h3>
+                    <div class="grid grid-cols-4 gap-3">
+                        <button class="flex flex-col items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition material-ripple">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-1">
+                                <i class="fas fa-plus text-blue-500"></i>
+                            </div>
+                            <span class="text-xs">Add Task</span>
+                        </button>
+                        <button class="flex flex-col items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition material-ripple">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mb-1">
+                                <i class="fas fa-calendar-plus text-green-500"></i>
+                            </div>
+                            <span class="text-xs">Add Event</span>
+                        </button>
+                        <button class="flex flex-col items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition material-ripple">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-1">
+                                <i class="fas fa-envelope text-purple-500"></i>
+                            </div>
+                            <span class="text-xs">New Email</span>
+                        </button>
+                        <button class="flex flex-col items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition material-ripple">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mb-1">
+                                <i class="fas fa-microphone text-yellow-500"></i>
+                            </div>
+                            <span class="text-xs">Voice</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Inbox View (Hidden by default) -->
+            <div id="inboxView" class="hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Smart Inbox</h2>
+
+                    <!-- Email Categories -->
+                    <div class="flex overflow-x-auto pb-2 mb-4">
+                        <button class="flex-shrink-0 px-4 py-2 bg-blue-600 text-white rounded-full mr-2">
+                            Primary
+                        </button>
+                        <button class="flex-shrink-0 px-4 py-2 bg-gray-100 rounded-full mr-2">
+                            Updates
+                        </button>
+                        <button class="flex-shrink-0 px-4 py-2 bg-gray-100 rounded-full mr-2">
+                            Social
+                        </button>
+                        <button class="flex-shrink-0 px-4 py-2 bg-gray-100 rounded-full">
+                            Promotions
+                        </button>
+                    </div>
+
+                    <!-- Email List -->
+                    <div class="space-y-3">
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-envelope text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <p class="font-medium">Sarah Johnson</p>
+                                        <p class="text-xs text-gray-500">10:24 AM</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-800 mt-1">Project timeline update</p>
+                                    <p class="text-sm text-gray-500 mt-1">The client has approved the initial designs. We need to adjust the timeline for phase 2...</p>
+                                    <div class="mt-2">
+                                        <button class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded mr-2">
+                                            <i class="fas fa-reply mr-1"></i> Reply
+                                        </button>
+                                        <button class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                                            <i class="fas fa-calendar-plus mr-1"></i> Schedule
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <div class="flex items-start">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-envelope text-green-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <p class="font-medium">IT Department</p>
+                                        <p class="text-xs text-gray-500">Yesterday</p>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-800 mt-1">System maintenance</p>
+                                    <p class="text-sm text-gray-500 mt-1">Scheduled maintenance this weekend. Systems will be unavailable from 10 PM Saturday...</p>
+                                    <div class="mt-2">
+                                        <button class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">
+                                            <i class="fas fa-bell mr-1"></i> Remind me
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View (Hidden by default) -->
+            <div id="calendarView" class="hidden">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold">Calendar</h2>
+                        <button class="text-blue-500 material-ripple">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+
+                    <!-- Month Header -->
+                    <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-3">
+                        <button class="p-2 rounded-full hover:bg-gray-100 material-ripple">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h3 class="font-bold">June 2023</h3>
+                        <button class="p-2 rounded-full hover:bg-gray-100 material-ripple">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Week Days -->
+                    <div class="grid grid-cols-7 gap-1 mb-2">
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">S</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">M</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">T</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">W</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">T</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">F</div>
+                        <div class="text-center text-xs font-medium text-gray-500 py-1">S</div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1">
+                        <div class="h-10 text-center text-sm py-2 text-gray-400">28</div>
+                        <div class="h-10 text-center text-sm py-2 text-gray-400">29</div>
+                        <div class="h-10 text-center text-sm py-2 text-gray-400">30</div>
+                        <div class="h-10 text-center text-sm py-2 text-gray-400">31</div>
+                        <div class="h-10 text-center text-sm py-2">1</div>
+                        <div class="h-10 text-center text-sm py-2">2</div>
+                        <div class="h-10 text-center text-sm py-2">3</div>
+
+                        <div class="h-10 text-center text-sm py-2">4</div>
+                        <div class="h-10 text-center text-sm py-2">5</div>
+                        <div class="h-10 text-center text-sm py-2 bg-blue-100 rounded-full font-medium">6</div>
+                        <div class="h-10 text-center text-sm py-2">7</div>
+                        <div class="h-10 text-center text-sm py-2">8</div>
+                        <div class="h-10 text-center text-sm py-2">9</div>
+                        <div class="h-10 text-center text-sm py-2">10</div>
+
+                        <div class="h-10 text-center text-sm py-2">11</div>
+                        <div class="h-10 text-center text-sm py-2">12</div>
+                        <div class="h-10 text-center text-sm py-2">13</div>
+                        <div class="h-10 text-center text-sm py-2 bg-blue-600 text-white rounded-full font-medium">14</div>
+                        <div class="h-10 text-center text-sm py-2">15</div>
+                        <div class="h-10 text-center text-sm py-2">16</div>
+                        <div class="h-10 text-center text-sm py-2">17</div>
+                    </div>
+
+                    <!-- Today's Events -->
+                    <div class="mt-6">
+                        <h3 class="font-bold text-lg mb-3">Today's Events</h3>
+                        <div class="space-y-2">
+                            <div class="bg-white border border-gray-200 rounded-xl p-3 shadow-sm">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                                    <p class="text-sm font-medium">9:30 AM - Team Standup</p>
+                                </div>
+                                <p class="text-xs text-gray-500 ml-4 mt-1">Zoom Meeting</p>
+                            </div>
+                            <div class="bg-white border border-gray-200 rounded-xl p-3 shadow-sm">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+                                    <p class="text-sm font-medium">11:00 AM - Client Call</p>
+                                </div>
+                                <p class="text-xs text-gray-500 ml-4 mt-1">Acme Corp - Conference Room B</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voice Interaction View (Hidden by default) -->
+            <div id="voiceView" class="hidden">
+                <div class="flex flex-col items-center justify-center h-full py-10">
+                    <div class="w-24 h-24 rounded-full bg-blue-100 flex items-center justify-center mb-6">
+                        <i class="fas fa-microphone text-blue-500 text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Voice Assistant</h2>
+                    <p class="text-gray-600 mb-8">Press and hold to speak</p>
+
+                    <button id="voiceButton" class="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition material-ripple">
+                        <i class="fas fa-microphone text-2xl"></i>
+                    </button>
+
+                    <div id="voiceListening" class="hidden mt-8 text-center">
+                        <div class="flex justify-center space-x-1 mb-4">
+                            <div class="w-2 h-6 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                            <div class="w-2 h-8 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                            <div class="w-2 h-10 bg-blue-600 rounded-full animate-bounce" style="animation-delay: 0.3s;"></div>
+                            <div class="w-2 h-8 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
+                            <div class="w-2 h-6 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.5s;"></div>
+                        </div>
+                        <p class="text-gray-600">Listening... Say something like:</p>
+                        <p class="text-sm text-gray-500 mt-2">"Schedule meeting with John tomorrow at 3pm"</p>
+                    </div>
+
+                    <div id="voiceResult" class="hidden mt-8 w-full">
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <p class="font-medium mb-2">You said:</p>
+                            <p class="text-gray-700 mb-4" id="voiceTranscript">Schedule meeting with John tomorrow at 3pm</p>
+                            <p class="font-medium mb-2">AI Response:</p>
+                            <p class="text-gray-700">I've scheduled a meeting with John for tomorrow at 3pm. Would you like me to send an invitation?</p>
+                            <div class="flex space-x-2 mt-4">
+                                <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg">Yes, send it</button>
+                                <button class="flex-1 bg-gray-100 text-gray-700 py-2 rounded-lg">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View (Hidden by default) -->
+            <div id="settingsView" class="hidden">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-6">Settings</h2>
+
+                    <!-- Account Section -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-lg mb-3 flex items-center">
+                            <i class="fas fa-user-circle text-blue-500 mr-2"></i>
+                            Account
+                        </h3>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                    <i class="fas fa-user text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium">Michael Johnson</p>
+                                    <p class="text-sm text-gray-500">michael@example.com</p>
+                                </div>
+                            </div>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Edit Profile</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Change Password</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Section -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-lg mb-3 flex items-center">
+                            <i class="fas fa-sliders text-blue-500 mr-2"></i>
+                            Preferences
+                        </h3>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="font-medium">Dark Mode</p>
+                                    <p class="text-sm text-gray-500">Switch to dark theme</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between py-2 border-t border-gray-100">
+                                <div>
+                                    <p class="font-medium">Offline Mode</p>
+                                    <p class="text-sm text-gray-500">Work without internet</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between py-2 border-t border-gray-100">
+                                <div>
+                                    <p class="font-medium">Voice Commands</p>
+                                    <p class="text-sm text-gray-500">Enable hands-free control</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Section -->
+                    <div class="mb-6">
+                        <h3 class="font-bold text-lg mb-3 flex items-center">
+                            <i class="fas fa-lock text-blue-500 mr-2"></i>
+                            Privacy
+                        </h3>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <button class="w-full text-left py-2 flex items-center justify-between">
+                                <span>Data Collection</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Permissions</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Delete Account</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div>
+                        <h3 class="font-bold text-lg mb-3 flex items-center">
+                            <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                            About
+                        </h3>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                            <div class="py-2">
+                                <p class="font-medium">Version</p>
+                                <p class="text-sm text-gray-500">1.0.0 (Build 42)</p>
+                            </div>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Terms of Service</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                            <button class="w-full text-left py-2 border-t border-gray-100 flex items-center justify-between">
+                                <span>Privacy Policy</span>
+                                <i class="fas fa-chevron-right text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bg-white border-t border-gray-200 flex justify-around py-2">
+            <button class="p-3 text-blue-600 flex flex-col items-center tab-button" data-view="dashboardView">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs mt-1">Home</span>
+            </button>
+            <button class="p-3 text-gray-500 flex flex-col items-center tab-button" data-view="inboxView">
+                <i class="fas fa-inbox text-xl"></i>
+                <span class="text-xs mt-1">Inbox</span>
+            </button>
+            <button class="p-3 text-gray-500 flex flex-col items-center tab-button" data-view="calendarView">
+                <i class="fas fa-calendar text-xl"></i>
+                <span class="text-xs mt-1">Calendar</span>
+            </button>
+            <button class="p-3 text-gray-500 flex flex-col items-center tab-button" data-view="voiceView">
+                <i class="fas fa-microphone text-xl"></i>
+                <span class="text-xs mt-1">Voice</span>
+            </button>
+            <button class="p-3 text-gray-500 flex flex-col items-center tab-button" data-view="settingsView">
+                <i class="fas fa-cog text-xl"></i>
+                <span class="text-xs mt-1">Settings</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab navigation
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const views = ['dashboardView', 'inboxView', 'calendarView', 'voiceView', 'settingsView'];
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetView = this.getAttribute('data-view');
+
+                    // Hide all views
+                    views.forEach(view => {
+                        document.getElementById(view).classList.add('hidden');
+                    });
+
+                    // Show selected view
+                    document.getElementById(targetView).classList.remove('hidden');
+
+                    // Update tab colors
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-blue-600');
+                        btn.classList.add('text-gray-500');
+                    });
+                    this.classList.remove('text-gray-500');
+                    this.classList.add('text-blue-600');
+                });
+            });
+
+            // Voice interaction
+            const voiceButton = document.getElementById('voiceButton');
+            const voiceListening = document.getElementById('voiceListening');
+            const voiceResult = document.getElementById('voiceResult');
+
+            voiceButton.addEventListener('mousedown', function() {
+                voiceListening.classList.remove('hidden');
+                voiceResult.classList.add('hidden');
+            });
+
+            voiceButton.addEventListener('mouseup', function() {
+                voiceListening.classList.add('hidden');
+                voiceResult.classList.remove('hidden');
+            });
+
+            voiceButton.addEventListener('mouseleave', function() {
+                if(!voiceResult.classList.contains('hidden')) {
+                    voiceListening.classList.add('hidden');
+                }
+            });
+
+            // Simulate offline mode
+            setTimeout(() => {
+                document.getElementById('offlineBanner').classList.remove('hidden');
+            }, 3000);
+
+            // Material ripple effect
+            const rippleButtons = document.querySelectorAll('.material-ripple');
+            rippleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Create ripple element
+                    const ripple = document.createElement('span');
+                    ripple.className = 'material-ripple-effect';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 600ms linear';
+                    ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+
+                    // Position the ripple
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+                    ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+
+                    // Add ripple to button
+                    this.appendChild(ripple);
+
+                    // Remove ripple after animation
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Add animation for new elements
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) { // Element node
+                            node.classList.add('animate-fade-in');
+                        }
+                    });
+                });
+            });
+
+            observer.observe(document.getElementById('mainContent'), {
+                childList: true,
+                subtree: true
+            });
+        });
+    </script>
+</body>
+</html>
