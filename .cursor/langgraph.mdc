@@ -8,18 +8,10 @@ description:
 globs: 
 alwaysApply: true
 ---
----
-description: langgraph mcp doc server
-globs:
-alwaysApply: true
----
-for ANY question about any language including but not limited to the following:
-+ LangGraph and/or any other specific framework, use the langgraph-docs-mcp server to help answer -- 
+for ANY question about LangGraph, use the langgraph-docs-mcp server to help answer -- 
 + call list_doc_sources tool to get the available llms.txt file
 + call fetch_docs tool to read it
 + reflect on the urls in llms.txt 
 + reflect on the input question 
 + call fetch_docs on any urls relevant to the question
 + use this to answer the question
-+ if llms.txt not available with the urls available make the necessary edits and add the following txt url
-+ use these to add new llms.txt to langgraph-docs-mcp @https://directory.llmstxt.cloud/ @https://llmstxt.site/ 

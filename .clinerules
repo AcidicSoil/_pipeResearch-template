@@ -1,15 +1,20 @@
-# AI Application Development Guidelines
-
-Start each chat with 🤖 emoji
-
-## LangGraph Documentation
-For ANY question about LangGraph, use the langgraph-docs-mcp server to help answer:
-- Call list_doc_sources tool to get the available llms.txt file
-- Call fetch_docs tool to read it
-- Reflect on the urls in llms.txt
-- Reflect on the input question
-- Call fetch_docs on any urls relevant to the question
-- Use this to answer the question
+---
+description: Cline docs MCP server
+globs:
+alwaysApply: true
+---
+for ANY question about Cline or related documentation:
++ Use the (cline-docs-mcp) AKA langgraph-docs-mcp server to help answer
++ Call list_doc_sources tool to get available docs.txt file
++ Call fetch_docs tool to read it
++ Reflect on the urls in docs.txt
++ Reflect on the input question
++ Call fetch_docs on any urls relevant to the question
++ Use this to answer the question
++ If docs.txt not available, make necessary edits and add these base URLs:
+  @https://docs.cline.ai/
+  @https://api.cline.ai/docs/
+  @https://github.com/modelcontextprotocol/cline-docs
 
 ## AI Systems Architecture Guidelines
 When designing agent systems:

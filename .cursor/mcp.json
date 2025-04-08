@@ -1,0 +1,52 @@
+{
+  "mcpServers": {
+    "langgraph-docs-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcpdoc",
+        "mcpdoc",
+        "--urls",
+        "LangGraph:https://langchain-ai.github.io/langgraph/llms.txt",
+        "--urls",
+        "LangChain:https://python.langchain.com/llms.txt",
+        "--urls",
+        "Cline:https://docs.cline.bot/llms.txt",
+        "--urls",
+        "AugmentCode:https://docs.augmentcode.com/llms.txt",
+        "--allowed-domains",
+        "langchain-ai.github.io",
+        "python.langchain.com",
+        "docs.cline.bot",
+        "docs.augmentcode.com",
+        "--transport",
+        "stdio"
+      ]
+    }
+  },
+  "mcpSseServers": {
+    "langgraph-docs-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcpdoc",
+        "mcpdoc",
+        "--urls",
+        "LangGraph:https://langchain-ai.github.io/langgraph/llms.txt",
+        "--urls",
+        "LangChain:https://python.langchain.com/llms.txt",
+        "--urls",
+        "Cline:https://docs.cline.bot/llms.txt",
+        "--urls",
+        "AugmentCode:https://docs.augmentcode.com/llms.txt",
+        "--allowed-domains",
+        "langchain-ai.github.io",
+        "python.langchain.com",
+        "docs.cline.bot",
+        "docs.augmentcode.com",
+        "--transport",
+        "sse"
+      ]
+    }
+  }
+}
