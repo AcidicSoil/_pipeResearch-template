@@ -33,3 +33,7 @@ dist
 **/build/
 **/out/
 **/coverage/
+
+
+# Cursor files
+.cursor/*

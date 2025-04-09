@@ -28,4 +28,3 @@ __pycache__/
 # Project Specific
 tools/__pycache__/
 tools/*.pyc
-.cursorrules
