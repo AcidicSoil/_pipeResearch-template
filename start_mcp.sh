@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# Create a local directory if it doesn't exist
+mkdir -p ./local_docs
+
+# We've already created the continue-llms.txt file in the local_docs directory
+# If you need to modify it, edit ./local_docs/continue-llms.txt directly
+
 uvx --from mcpdoc mcpdoc \
-    --urls "LangGraph:https://langchain-ai.github.io/langgraph/llms.txt" "Cline:https://docs.cline.bot/llms.txt" "LangChain:https://python.langchain.com/llms.txt" "AugmentCode:https://docs.augmentcode.com/llms.txt" \
-    --allowed-domains langchain-ai.github.io docs.cline.bot python.langchain.com docs.augmentcode.com \
+    --yaml config.yaml \
+    --allowed-domains langchain-ai.github.io langchain.com cline.bot augmentcode.com continue-llms.txt sourcegraph.com \
     --transport sse \
     --port 8082 \
     --host localhost &

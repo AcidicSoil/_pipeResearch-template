@@ -1,0 +1,3 @@
+[submodule ".cursor/tools/firecrawl-app-examples"]
+	path = .cursor/tools/firecrawl-app-examples
+	url = https://github.com/AcidicSoil/_pipeResearch-template.git

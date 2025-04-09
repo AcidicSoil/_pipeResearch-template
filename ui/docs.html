@@ -1,0 +1,247 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Documentation Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<style>
+			@keyframes pulse {
+				0% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.5;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			.pulse {
+				animation: pulse 2s infinite;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-50 min-h-screen">
+		<div class="container mx-auto px-4 py-8">
+			<!-- Header -->
+			<header class="flex justify-between items-center mb-8">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800">TaskFlow</h1>
+					<p class="text-gray-600">Documentation Dashboard</p>
+				</div>
+				<div class="flex items-center space-x-4">
+					<div class="relative">
+						<div
+							class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
+							<i class="fas fa-circle-notch pulse text-blue-500"></i>
+							<span class="text-sm font-medium">CI Running</span>
+						</div>
+						<div
+							class="absolute -bottom-5 left-0 right-0 text-center text-xs text-gray-500">
+							Last build: <span id="lastBuildTime">2 minutes ago</span>
+						</div>
+					</div>
+					<div class="bg-white p-2 rounded-full shadow-sm">
+						<img
+							src="https://ui-avatars.com/api/?name=Dev+Team"
+							alt="Team"
+							class="w-8 h-8 rounded-full" />
+					</div>
+				</div>
+			</header>
+
+			<!-- Documentation -->
+			<section>
+				<h2 class="text-2xl font-bold text-gray-800 mb-6">Documentation</h2>
+				<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+					<!-- API Docs -->
+					<div
+						class="bg-white rounded-lg shadow-sm overflow-hidden lg:col-span-2">
+						<div class="px-6 py-4 border-b border-gray-100 bg-red-50">
+							<h3 class="text-lg font-semibold text-red-800 flex items-center">
+								<i class="fas fa-file-code mr-2"></i>
+								API Documentation
+							</h3>
+						</div>
+						<div class="p-6">
+							<div class="mb-4">
+								<h4 class="font-medium mb-2">Swagger/OpenAPI 3.1</h4>
+								<div class="flex flex-wrap gap-2 mb-3">
+									<span
+										class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+										>GET /tasks</span
+									>
+									<span
+										class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+										>POST /tasks</span
+									>
+									<span
+										class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+										>GET /calendar</span
+									>
+									<span
+										class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+										>POST /assistant/fncall</span
+									>
+									<span
+										class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded"
+										>POST /sync/tasks</span
+									>
+								</div>
+								<div class="bg-gray-50 p-3 rounded border border-gray-200">
+									<code class="text-xs text-gray-800">
+										// Example API call<br />
+										fetch('/api/tasks', {<br />
+										&nbsp;&nbsp;method: 'POST',<br />
+										&nbsp;&nbsp;headers: { 'Content-Type': 'application/json'
+										},<br />
+										&nbsp;&nbsp;body: JSON.stringify({ lastSyncedAt:
+										'2023-11-15T12:00:00Z' })<br />
+										})
+									</code>
+								</div>
+							</div>
+							<div class="pt-4 border-t border-gray-100">
+								<a
+									href="#"
+									class="text-sm font-medium text-red-600 hover:text-red-800 flex items-center">
+									<i class="fas fa-external-link-alt mr-2"></i>
+									View API Documentation
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Architecture -->
+					<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+						<div class="px-6 py-4 border-b border-gray-100 bg-indigo-50">
+							<h3
+								class="text-lg font-semibold text-indigo-800 flex items-center">
+								<i class="fas fa-sitemap mr-2"></i>
+								Architecture
+							</h3>
+						</div>
+						<div class="p-6">
+							<div class="mb-4">
+								<h4 class="font-medium mb-2">System Components</h4>
+								<ul class="text-sm space-y-2">
+									<li class="flex items-center">
+										<i class="fas fa-mobile-alt text-indigo-500 mr-2"></i>
+										Flutter UI (Web/Mobile)
+									</li>
+									<li class="flex items-center">
+										<i class="fas fa-project-diagram text-indigo-500 mr-2"></i>
+										Riverpod State Management
+									</li>
+									<li class="flex items-center">
+										<i class="fas fa-database text-indigo-500 mr-2"></i>
+										Drift Local DB
+									</li>
+									<li class="flex items-center">
+										<i class="fas fa-cloud text-indigo-500 mr-2"></i>
+										Supabase Edge Functions
+									</li>
+									<li class="flex items-center">
+										<i class="fas fa-robot text-indigo-500 mr-2"></i>
+										OpenAI LLM Integration
+									</li>
+								</ul>
+							</div>
+							<div class="pt-4 border-t border-gray-100">
+								<a
+									href="#"
+									class="text-sm font-medium text-indigo-600 hover:text-indigo-800 flex items-center">
+									<i class="fas fa-book-open mr-2"></i>
+									View Architecture Diagrams
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- README -->
+					<div
+						class="bg-white rounded-lg shadow-sm overflow-hidden lg:col-span-3">
+						<div class="px-6 py-4 border-b border-gray-100 bg-green-50">
+							<h3
+								class="text-lg font-semibold text-green-800 flex items-center">
+								<i class="fas fa-book mr-2"></i>
+								Project README
+							</h3>
+						</div>
+						<div class="p-6">
+							<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+								<div>
+									<h4 class="font-medium mb-2">Getting Started</h4>
+									<div class="bg-gray-50 p-3 rounded border border-gray-200">
+										<code class="text-xs text-gray-800">
+											# Clone the repo<br />
+											git clone https://github.com/yourrepo/taskflow.git<br /><br />
+
+											# Install dependencies<br />
+											flutter pub get<br /><br />
+
+											# Run the app<br />
+											flutter run
+										</code>
+									</div>
+								</div>
+								<div>
+									<h4 class="font-medium mb-2">Testing</h4>
+									<div class="bg-gray-50 p-3 rounded border border-gray-200">
+										<code class="text-xs text-gray-800">
+											# Run unit tests<br />
+											flutter test<br /><br />
+
+											# Run integration tests<br />
+											flutter test integration_test<br /><br />
+
+											# Run E2E tests<br />
+											flutter drive --target=test_driver/app.dart
+										</code>
+									</div>
+								</div>
+								<div>
+									<h4 class="font-medium mb-2">Deployment</h4>
+									<div class="bg-gray-50 p-3 rounded border border-gray-200">
+										<code class="text-xs text-gray-800">
+											# Build for web<br />
+											flutter build web<br /><br />
+
+											# Deploy to Vercel<br />
+											vercel --prod<br /><br />
+
+											# Deploy Supabase<br />
+											supabase deploy
+										</code>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<script>
+			// Simulate CI build updates
+			setInterval(() => {
+				const times = [
+					"Just now",
+					"1 minute ago",
+					"2 minutes ago",
+					"5 minutes ago",
+				];
+				document.getElementById("lastBuildTime").textContent =
+					times[Math.floor(Math.random() * times.length)];
+			}, 30000);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,15 @@
+# Configuration for mcpdoc server
+- name: LangGraph
+  llms_txt: https://langchain-ai.github.io/langgraph/llms.txt
+- name: LangChain
+  llms_txt: https://python.langchain.com/llms.txt
+- name: Cline
+  llms_txt: https://docs.cline.bot/llms.txt
+- name: AugmentCode
+  llms_txt: https://docs.augmentcode.com/llms.txt
+- name: Continue
+  llms_txt: C:/Users/comfy/Projects/_pipeResearch-new/local_docs/continue-llms.txt
+- name: Sourcegraph
+  llms_txt: https://sourcegraph.com/docs/llms.txt
+- name: Sourcegraph
+  llms_txt: https://sourcegraph.com/docs/llms.txt

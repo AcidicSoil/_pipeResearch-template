@@ -1,0 +1,300 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Performance Optimization Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<style>
+			.progress-bar {
+				height: 8px;
+				border-radius: 4px;
+				overflow: hidden;
+			}
+			.progress-fill {
+				height: 100%;
+				transition: width 0.5s ease;
+			}
+			.tech-badge {
+				transition: all 0.2s ease;
+			}
+			.tech-badge:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+			}
+			@keyframes pulse {
+				0% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.5;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			.pulse {
+				animation: pulse 2s infinite;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-50 min-h-screen">
+		<div class="container mx-auto px-4 py-8">
+			<!-- Header -->
+			<header class="flex justify-between items-center mb-8">
+				<div>
+					<h1 class="text-3xl font-bold text-gray-800">TaskFlow</h1>
+					<p class="text-gray-600">Performance Optimization Dashboard</p>
+				</div>
+				<div class="flex items-center space-x-4">
+					<div class="relative">
+						<div
+							class="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow-sm">
+							<i class="fas fa-circle-notch pulse text-blue-500"></i>
+							<span class="text-sm font-medium">CI Running</span>
+						</div>
+						<div
+							class="absolute -bottom-5 left-0 right-0 text-center text-xs text-gray-500">
+							Last build: <span id="lastBuildTime">2 minutes ago</span>
+						</div>
+					</div>
+					<div class="bg-white p-2 rounded-full shadow-sm">
+						<img
+							src="https://ui-avatars.com/api/?name=Dev+Team"
+							alt="Team"
+							class="w-8 h-8 rounded-full" />
+					</div>
+				</div>
+			</header>
+
+			<!-- Performance Metrics -->
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-gray-800 mb-6">
+					Performance Metrics
+				</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					<!-- Frontend -->
+					<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+						<div class="px-6 py-4 border-b border-gray-100 bg-blue-50">
+							<h3 class="text-lg font-semibold text-blue-800 flex items-center">
+								<i class="fas fa-mobile-screen mr-2"></i>
+								Frontend Optimization
+							</h3>
+						</div>
+						<div class="p-6 space-y-4">
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Code Splitting</span>
+									<span class="text-sm font-medium">100%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-blue-500"
+										style="width: 100%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">List Virtualization</span>
+									<span class="text-sm font-medium">100%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-blue-500"
+										style="width: 100%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Asset Optimization</span>
+									<span class="text-sm font-medium">85%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-blue-500"
+										style="width: 85%"></div>
+								</div>
+							</div>
+							<div class="pt-4">
+								<h4 class="text-sm font-medium mb-2">Technologies</h4>
+								<div class="flex flex-wrap gap-2">
+									<span
+										class="tech-badge bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
+										>Flutter Web</span
+									>
+									<span
+										class="tech-badge bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
+										>ListView.builder</span
+									>
+									<span
+										class="tech-badge bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
+										>SVG Assets</span
+									>
+									<span
+										class="tech-badge bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
+										>Tree Shaking</span
+									>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Backend -->
+					<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+						<div class="px-6 py-4 border-b border-gray-100 bg-emerald-50">
+							<h3
+								class="text-lg font-semibold text-emerald-800 flex items-center">
+								<i class="fas fa-server mr-2"></i>
+								Backend Optimization
+							</h3>
+						</div>
+						<div class="p-6 space-y-4">
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Cold Start Time</span>
+									<span class="text-sm font-medium">300ms</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-emerald-500"
+										style="width: 90%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Query Performance</span>
+									<span class="text-sm font-medium">95%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-emerald-500"
+										style="width: 95%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Rate Limiting</span>
+									<span class="text-sm font-medium">100%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-emerald-500"
+										style="width: 100%"></div>
+								</div>
+							</div>
+							<div class="pt-4">
+								<h4 class="text-sm font-medium mb-2">Technologies</h4>
+								<div class="flex flex-wrap gap-2">
+									<span
+										class="tech-badge bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs"
+										>Supabase</span
+									>
+									<span
+										class="tech-badge bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs"
+										>Edge Functions</span
+									>
+									<span
+										class="tech-badge bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs"
+										>Postgres Indexes</span
+									>
+									<span
+										class="tech-badge bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs"
+										>Warm Containers</span
+									>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- API -->
+					<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+						<div class="px-6 py-4 border-b border-gray-100 bg-amber-50">
+							<h3
+								class="text-lg font-semibold text-amber-800 flex items-center">
+								<i class="fas fa-code mr-2"></i>
+								API Optimization
+							</h3>
+						</div>
+						<div class="p-6 space-y-4">
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Payload Size</span>
+									<span class="text-sm font-medium">2.5KB avg</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-amber-500"
+										style="width: 88%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Pagination</span>
+									<span class="text-sm font-medium">100%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-amber-500"
+										style="width: 100%"></div>
+								</div>
+							</div>
+							<div>
+								<div class="flex justify-between mb-1">
+									<span class="text-sm font-medium">Batch Updates</span>
+									<span class="text-sm font-medium">75%</span>
+								</div>
+								<div class="progress-bar bg-gray-200">
+									<div
+										class="progress-fill bg-amber-500"
+										style="width: 75%"></div>
+								</div>
+							</div>
+							<div class="pt-4">
+								<h4 class="text-sm font-medium mb-2">Technologies</h4>
+								<div class="flex flex-wrap gap-2">
+									<span
+										class="tech-badge bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs"
+										>REST API</span
+									>
+									<span
+										class="tech-badge bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs"
+										>Differential Sync</span
+									>
+									<span
+										class="tech-badge bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs"
+										>lastSyncedAt</span
+									>
+									<span
+										class="tech-badge bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs"
+										>Batch Processing</span
+									>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<script>
+			// Simulate CI build updates
+			setInterval(() => {
+				const times = [
+					"Just now",
+					"1 minute ago",
+					"2 minutes ago",
+					"5 minutes ago",
+				];
+				document.getElementById("lastBuildTime").textContent =
+					times[Math.floor(Math.random() * times.length)];
+			}, 30000);
+		</script>
+	</body>
+</html>
